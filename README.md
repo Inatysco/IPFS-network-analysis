@@ -19,18 +19,17 @@ Run IPFS in debug mode and save the DHT logs
 ìpfs daemon --routing=dht
 ```
 
-2. Convert the file
-
-Place 
+2. Convert the log file into a file that can be imported in a SQL database
 
 ```
 export IPFS_URLS="http://127.0.0.1:5001" # the url to the API of the IPFS node previously launched
 python 2_analyse_ipfs_log.py mylog.log > mylog.db
 ```
 
+
 The output is a file with SQL command that can be then imported in an SQL database (postgresql)
 
-## SQL Import
+## SQL import
 
 1. Create schema
 
@@ -45,7 +44,7 @@ psql database user < 3_schema.sql
 psql database user < mylog.db
 ```
 
-## Graph generation
+## Graphics generation
 
 ```
 python 4_generate_graphs.py database user password
