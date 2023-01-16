@@ -191,10 +191,6 @@ def extract_line2(line, pattern):
   process_peer(ipfs_url, provider, timeout=0.5)
   print("insert into storage(peerid, cid, date) values('%s', '%s', '%s') on conflict do nothing;" % (provider, cid58, date, ))
 
-# # try to get the closest peerid of the cid to enlarge the horizon
-# for peer in dhtquery(ipfs_url, cid58):
-#  process_peer(ipfs_url, peer)
-
 
 def main_file(filename):
  if not os.path.isfile(filename) or not os.access(filename, os.R_OK):
@@ -202,15 +198,10 @@ def main_file(filename):
   sys.exit(1)
  with concurrent.futures.ThreadPoolExecutor(max_workers=NB_WORKERS) as executor:
   with open(filename, 'r') as f:
-   s = False
    for line in f:
-    if line.startswith(sys.argv[2]):
-     s = True
-    if s:
-     m = LOG_PATTERN.search(line)
-     if m:
-#      extract_line(line, m)
-      executor.submit(extract_line, line, m)
+    m = LOG_PATTERN.search(line)
+    if m:
+     executor.submit(extract_line, line, m)
 
 def main_stdin():
  with concurrent.futures.ThreadPoolExecutor(max_workers=NB_WORKERS) as executor:
@@ -219,7 +210,6 @@ def main_stdin():
     for line in sys.stdin:
      m = LOG_PATTERN.search(line)
      if m:
-#      extract_line(line, m)
       executor.submit(extract_line, line, m)
    except UnicodeDecodeError as e:
     continue
