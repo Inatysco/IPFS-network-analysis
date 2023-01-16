@@ -20,9 +20,12 @@ Run IPFS in debug mode and save the DHT logs
 ```
 
 2. Convert the file
+
+Place 
+
 ```
 export IPFS_URLS="http://127.0.0.1:5001" # the url to the API of the IPFS node previously launched
-python pipeline_file.py mylog.log > mylog.db
+python 2_analyse_ipfs_log.py mylog.log > mylog.db
 ```
 
 The output is a file with SQL command that can be then imported in an SQL database (postgresql)
@@ -34,7 +37,7 @@ The output is a file with SQL command that can be then imported in an SQL databa
 
 
 ```
-psql database user < schema.sql
+psql database user < 3_schema.sql
 ```
 
 2. Import previously analysed data
@@ -45,7 +48,7 @@ psql database user < mylog.db
 ## Graph generation
 
 ```
-python pipeline_graph.py database user password
+python 4_generate_graphs.py database user password
 ```
 
 It generates csv and plot files in /tmp/ folder. The graphs can be then generated using gnuplot executable
