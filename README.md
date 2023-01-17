@@ -21,22 +21,24 @@ Run IPFS in debug mode and save the DHT logs
 
 2. Convert the log file into a file that can be imported in a SQL database
 
+First, download the Maxmind databases containing information on IP addresses and Autonomous systems.
+This can be done by registering a free license key on https://www.maxmind.com/en/geolite2/signup?lang=en and using the ``geoipupdate`` software program. This downloads the database in /var/lib/GeoIP/ directory.
+
+
+Then launch the python script to convert the log file into a list of SQL commands.
 ```
 export IPFS_URLS="http://127.0.0.1:5001" # the url to the API of the IPFS node previously launched
-python 2_analyse_ipfs_log.py mylog.log > mylog.db
+python scripts/2_analyse_ipfs_log.py mylog.log > mylog.db
 ```
-
-
-The output is a file with SQL command that can be then imported in an SQL database (postgresql)
 
 ## SQL import
 
+The previous output is a file with SQL command that can be then imported in an SQL database (postgresql)
+
 1. Create schema
 
-
-
 ```
-psql database user < 3_schema.sql
+psql database user < scripts/3_schema.sql
 ```
 
 2. Import previously analysed data
@@ -47,7 +49,7 @@ psql database user < mylog.db
 ## Graphics generation
 
 ```
-python 4_generate_graphs.py database user password
+python scripts/4_generate_graphs.py database user password
 ```
 
 It generates csv and plot files in /tmp/ folder. The graphs can be then generated using gnuplot executable

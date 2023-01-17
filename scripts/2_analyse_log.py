@@ -93,19 +93,19 @@ def ip_info(ip):
  info = {}
  info['addr'] = ip
  try:
-  with geoip2.database.Reader('geoip/GeoLite2-Country.mmdb') as reader:
+  with geoip2.database.Reader('/var/lib/GeoIP/GeoLite2-Country.mmdb') as reader:
    response = reader.country(ip)
    info['country'] = response.country.iso_code
  except:
   info['country'] = None
  try:
-  with geoip2.database.Reader('geoip/GeoLite2-City.mmdb') as reader:
+  with geoip2.database.Reader('/var/lib/GeoIP/GeoLite2-City.mmdb') as reader:
    response = reader.city(ip)
    info['city'] = response.city.name
  except:
   info['city'] = None
  try:
-  with geoip2.database.Reader('geoip/GeoLite2-ASN.mmdb') as reader:
+  with geoip2.database.Reader('/var/lib/GeoIP/GeoLite2-ASN.mmdb') as reader:
    response = reader.asn(ip)
    info['asn'] = response.autonomous_system_number
    info['autonomous_system'] = response.autonomous_system_organization
