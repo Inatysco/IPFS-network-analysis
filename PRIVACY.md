@@ -17,8 +17,7 @@ In addition to these pieces of data, we are sending requests to determine:
 
 
 ## Who are you sharing this data with?
-Before any study 
-The collected pieces of data have been anonymised and the following pieces of information have been replaced with random strings before making the database available:
+Before any study, the collected pieces of data have been anonymised and the following pieces of information have been replaced with random strings before making the database available:
  - the node idenfiers
  - the file identifiers
  - the IP addresses
