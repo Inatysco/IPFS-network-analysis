@@ -6,7 +6,7 @@ To that end, we set up a public node that save the requests that are broadcasted
 
 ## What pieces of data are you collecting?
 As part of our work, we are passively collecting DHT requests on the IPFS network.
-These requests contains:
+These requests contain:
 
  - the node identifier that sent the request in the network
  - the file identifier that the node is looking for
