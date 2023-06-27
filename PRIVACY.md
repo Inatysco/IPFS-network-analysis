@@ -2,7 +2,7 @@
 
 We are a team of researchers working at Inatysco (https://inatysco.fr).
 We are characterising the IPFS Public Network, and we are trying to evaluate the distribution of requests among the days, the number of nodes, and the mimetype of file exchanged.
-To that end, we set up a public node that save the requests that are broadcasted or routed inside the network.
+To that end, we set up a public node that saves the requests that are broadcasted or routed inside the network.
 
 ## What pieces of data are you collecting?
 As part of our work, we are passively collecting DHT requests on the IPFS network.
