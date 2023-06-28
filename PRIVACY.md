@@ -23,7 +23,7 @@ Before any study, the collected pieces of data have been anonymised and the foll
  - the IP addresses
 
 ## Contact
-If you have any question you can contact us using the following email address: rgpd@inatysco.fr
+If you have any question you can contact us using the following email address: rgpd(at)inatysco.fr
 
 
 ## What are my rights?
