@@ -25,8 +25,14 @@ GEOIP_COUNTRY_DATABASE = os.environ['GEOLITE_COUNTRY'] if 'GEOLITE_COUNTRY' in o
 GEOIP_CITY_DATABASE = os.environ['GEOLITE_CITY'] if 'GEOLITE_CITY' in os.environ else '/var/lib/GeoIP/GeoLite2-City.mmdb'
 GEOIP_ASN_DATABASE = os.environ['GEOLITE_ASN'] if 'GEOLITE_ASN' in os.environ else '/var/lib/GeoIP/GeoLite2-ASN.mmdb'
 
-def dhtquery(ipfs_url, arg):
- """get the closest peers from arg in the DHT"""
+def dhtquery(ipfs_url, arg): -> list
+ """
+ Get the closest peers from arg in the DHT
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str arg: The key to query in the DHT
+ :return: The list of values associated to the key
+ """
+
  peers = []
  r = requests.post('%s/api/v0/dht/query?arg=%s&verbose=0' % (ipfs_url, arg))
  for line in r.iter_lines():
@@ -41,8 +47,15 @@ def dhtquery(ipfs_url, arg):
      peers.append(response['ID'])
  return peers
 
-def findprovs(ipfs_url, cid, num_provs=5, timeout=REQUEST_TIMEOUT):
- """lookup the ipfs nodes that store a specific file (CID)"""
+def findprovs(ipfs_url, cid, num_provs=25, timeout=REQUEST_TIMEOUT):
+ """
+ Lookup the ipfs nodes that store a specific file (CID)
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str cid: The CID to lookup
+ :param str num_provs: The number of proviers (PeerID) to return (default: 25)
+ :param str timeout: The max time to execute the query
+ :return: The list of PeerID storing a replica of the CID
+ """
  providers = []
  r = requests.post('%s/api/v0/dht/findprovs?arg=%s&verbose=0&num-providers=%d' % (ipfs_url, cid, num_provs), timeout=(timeout, timeout))
  for line in r.iter_lines():
@@ -58,7 +71,13 @@ def findprovs(ipfs_url, cid, num_provs=5, timeout=REQUEST_TIMEOUT):
  return providers
 
 def findpeer(ipfs_url, peerid, timeout=REQUEST_TIMEOUT):
- """lookup a peer in a DHT and returns the multiaddr containing IP address and port to connect to it"""
+ """
+ Lookup for the IP addresses associated to a PeerID
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str peerid: The PEERID to lookup
+ :param str time: The max time to execute the query
+ :return: The list of multiaddr corresponding to the requested PEERID
+ """
  ips = []
  try:
   r = requests.post('%s/api/v0/dht/findpeer?arg=%s&verbose=0' % (ipfs_url, peerid), timeout=(timeout, timeout))
@@ -75,7 +94,11 @@ def findpeer(ipfs_url, peerid, timeout=REQUEST_TIMEOUT):
  return ips
 
 def filter(addrs):
- """Remove non globally routed IP addresses from a multiaddr"""
+ """
+ Remove non globally routed IP addresses from a multiaddr and extract the IP address and port from a multiaddr
+ :param list: The list of multiaddr to filter
+ :return: The list of couples (IP address, port) corresponding of the multiaddrs containing a globally routable IP address
+ """
  res = []
  for addr in addrs:
   a = addr.split('/')
@@ -97,7 +120,11 @@ def filter(addrs):
  return list(set(res))
 
 def ip_info(ip):
- """lookup for ASN, Country and City from an IP address"""
+ """
+ Lookup for ASN, Country and City from an IP adress
+ :param str ip: The IP adress to get the pieces of information on
+ :return: A dictionary with the Country, the ASN and the city of the IP address specified in argument
+ """
  info = {}
  info['addr'] = ip
  try:
@@ -128,7 +155,12 @@ def ip_info(ip):
  return info
 
 def mimetype(ipfs_url, cid):
- """Downloads the first bytes of CID and returns its mimetype"""
+ """
+ Downloads the first bytes of CID and returns its mimetype
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str cid: The CID of the file to get the mimetype
+ :return: The mimetype of the file
+ """
  try:
   r = requests.post('%s/api/v0/cat?arg=%s&offset=0&length=1000' % (ipfs_url, cid), timeout=REQUEST_TIMEOUT)
   filetype = magic.detect_from_content(r.content)
@@ -142,7 +174,11 @@ def cid64_to_cid58(cid64):
  return base58check.b58encode(cid).decode()
 
 def process_logline(line, pattern):
- """From a IPFS log line, collect information on PEERID and CID and generate the SQL commands to import these pieces of information into a database"""
+ """
+ From a IPFS log line, collect information on PEERID and CID and generate the SQL commands to import these pieces of information into a database
+ :param str line: The raw line from IPFS log to analyse
+ :param str pattern: The line parsed using the regex that extracts the CID and PEERID
+ """
  try:
   date = line.split('\t')[0]
   peerid = pattern.group(2)
@@ -169,7 +205,12 @@ def process_logline(line, pattern):
   print(e, file=sys.stderr)
 
 def process_peer(ipfs_url, peerid, timeout=REQUEST_TIMEOUT):
- """collect pieces of information from a PEERID and generate SQL commands to add them in a database"""
+ """
+ Collect pieces of information from a PEERID and generate SQL commands to add them in a database
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str peerid: The PEERID to get information on
+ :param str timeout: The max time to execute the query
+ """
  # we find the detailed information on the peer (ip address)
  addrs = filter(list(set(findpeer(ipfs_url, peerid, timeout))))
  for addr, port in addrs:
@@ -184,13 +225,21 @@ def process_peer(ipfs_url, peerid, timeout=REQUEST_TIMEOUT):
    print(("insert into peer(id, addr, port) values('%s', null, null) on conflict do nothing;" % (peerid, )).replace('"', "'").replace("'None'", "null"))
 
 def process_file(ipfs_url, cid):
- """collect pieces of information from a CID and generate SQL commands to add them in a database"""
+ """
+ Collect pieces of information from a CID and generate SQL commands to add them in a database
+ :param str ipfs_url: The URL to the IPFS node used to query the DHT
+ :param str peerid: The PEERID to get information on
+ :param str timeout: The max time to execute the query
+ """
  mime, description = mimetype(ipfs_url, cid)
  print(("insert into files(cid, mimetype, description) values('%s', '%s', '%s') on conflict do nothing;" % (cid, mime, description, )).replace('"', "'").replace("'None'", "null"))
 
 
 def check_connectivity(ipfs_url):
- """Wait until the IPFS_URL becomes available"""
+ """
+ Wait until the IPFS_URL becomes available
+ :param str ipfs_url: The URL to the IPFS node we want to check its availability
+ """
  ok=False
  while not ok:
   try:
