@@ -67,6 +67,9 @@ It generates csv and plot files. The graphs can be then generated using gnuplot 
 
 ## Pre-computed database
 
-The folder "databases" contains two files that are the databases we built during our own collect.
+The `database/` folder contains two files that are the databases we built during our own collect.
+The file `gcp_20211217_20230101.db` contains the records collected between the 17th December 2021 and the 01st January 2023 from a node hosted on Google Cloud.
+The file `aws_20211210_20221120.db` contains the records collected between the 10th December 2021 and the 20th November 2022 from a node hosted on Amazon Web Services.
+
 The databases have been anonymised using the script `scripts/4_database_anonymisation.py`. The script replaces the CID, PEERID and IP Adresses contained in the database by random UUID values.
 
