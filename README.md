@@ -1,6 +1,6 @@
 # IPFS analysis
 
-This repository contains the used scripts to collect the trace of DHT requests in the IPFS public network
+This repository contains the scripts used to collect the trace of DHT requests in the IPFS public network
 
 ## Collect data
 
