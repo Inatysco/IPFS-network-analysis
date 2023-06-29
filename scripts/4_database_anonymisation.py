@@ -6,7 +6,11 @@ import concurrent.futures
 MAX_WORKERS=50
 
 def collect_peerid(sql):
- """Establish the list of PEERID that we can found in the whole database and associate each of them with a random UUID"""
+ """
+ Establish the list of PEERID that we can found in the whole database and associate each of them with a random UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :return: A dictionary that associate a random UUID to each PEERID
+ """
  peerid_matching = {}
  for request in ["select distinct id from peer", "select distinct peerid from activity", "select distinct peerid from storage"]:
   with sql.cursor() as cur:
@@ -19,7 +23,11 @@ def collect_peerid(sql):
  return peerid_matching
 
 def collect_cid(sql):
- """Establish the list of CID that we can found in the whole database and associate each of them with a random UUID"""
+ """
+ Establish the list of CID that we can found in the whole database and associate each of them with a random UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :return: A dictionary that associate a random UUID to each CID
+ """
  cid_matching = {}
  for request in ["select distinct cid from files", "select distinct cid from activity", "select distinct cid from storage"]:
   with sql.cursor() as cur:
@@ -32,7 +40,11 @@ def collect_cid(sql):
  return cid_matching
 
 def collect_addr(sql):
- """Establish the list of IP addresses that we can found in the whole database and associate each of them with a random UUID"""
+ """
+ Establish the list of IP addresses that we can found in the whole database and associate each of them with a random UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :return: A dictionary that associate a random UUID to each IP address
+ """
  addr_matching = {}
  for request in ["select distinct addr from ip"]:
   with sql.cursor() as cur:
@@ -45,7 +57,12 @@ def collect_addr(sql):
  return addr_matching
 
 def anonymise_cid(sql, old_cid, new_cid):
- """Replace each CID with its corresponding UUID"""
+ """
+ Replace each CID with its corresponding UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :param str old_cid: The CID to replace
+ :param str new_cid: The new value for the CID (aka the corresponding UUID)
+ """
  print("cid %s -> %s" % (old_cid, new_cid), file=sys.stderr)
  with sql.cursor() as cur:
   cur.execute("update files set cid=%s where cid=%s", (new_cid, old_cid))
@@ -54,7 +71,12 @@ def anonymise_cid(sql, old_cid, new_cid):
  sql.commit()
 
 def anonymise_peerid(sql, old_peerid, new_peerid):
- """Replace each PEERID with its corresponding UUID"""
+ """
+ Replace each PEERID with its corresponding UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :param str old_peerid: The PEERID to replace
+ :param str new_peerid: The new value for the PEERID (aka the corresponding UUID)
+ """
  print("peerid %s -> %s" % (old_peerid, new_peerid), file=sys.stderr)
  with sql.cursor() as cur:
   cur.execute("update peer set id=%s where id=%s", (new_peerid, old_peerid))
@@ -63,7 +85,12 @@ def anonymise_peerid(sql, old_peerid, new_peerid):
  sql.commit()
 
 def anonymise_addr(sql, old_addr, new_addr):
- """Replace each IP address with its corresponding UUID"""
+ """
+ Replace each IP address with its corresponding UUID
+ :param psycopg2 sql: Psycopg2 instance
+ :param str old_addr: The IP address to replace
+ :param str new_addr: The new value for the IP address (aka the corresponding UUID)
+ """
  print("addr %s -> %s" % (old_addr, new_addr), file=sys.stderr)
  with sql.cursor() as cur:
   cur.execute("update ip set addr=%s where addr=%s", (new_addr, old_addr))
