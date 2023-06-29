@@ -17,11 +17,10 @@ Therefoe some DHT requests will be received and forwarded by the node and theref
 ## Analysis of the logfile
 
 The logfile contains only date/hour, peerid and cid (file identifier) of the requested file.
-The script 2_analyse_ipfs_log.py is designed to try to detect the IP address of the peerid and the filetype of the file corresponding to the cid.
+The script `scripts/1_analyse_ipfs_log.py` is designed to try to detect the IP address of the peerid and the filetype of the file corresponding to the cid.
 
 
-
-1. Launch an IPFS daemon
+1. Launch an IPFS daemon that will be used to associate IP address, filetype, ... from the PEERID and CID collected in the logfile
 ```
 ìpfs daemon --routing=dht
 ```
@@ -35,7 +34,7 @@ This can be done by registering a free license key on https://www.maxmind.com/en
 Then launch the python script to convert the log file into a list of SQL commands.
 ```
 export IPFS_URLS="http://127.0.0.1:5001" # the url to the API of the IPFS node previously launched
-python scripts/2_analyse_ipfs_log.py mylog.log > mylog.db
+python scripts/1_analyse_ipfs_log.py mylog.log > mylog.db
 ```
 
 ## SQL import
@@ -45,7 +44,7 @@ The previous output is a file with SQL command that can be then imported in an S
 1. Create schema
 
 ```
-psql database user < scripts/3_schema.sql
+psql database user < scripts/2_schema.sql
 ```
 
 2. Import previously analysed data
@@ -56,13 +55,18 @@ psql database user < mylog.db
 ## Graphics generation
 
 ```
-python scripts/4_generate_graphs.py database user password
+python scripts/3_generate_graphs.py database user password graph.csv graph.plot graph.png
 ```
 
-It generates csv and plot files in /tmp/ folder. The graphs can be then generated using gnuplot executable
+It generates csv and plot files. The graphs can be then generated using gnuplot executable:
 
- - gnuplot 'graph_days.plot': to generate the graph indicating the number of requests received for each day of the period
- - gnuplot 'graph_requests.plot' to generate the graph showing the number of requests received for each file identifier
+ - gnuplot 'graph_requests.plot': to generate the graph indicating the number of requests received for each day of the period
+ - gnuplot 'graph_days.plot' to generate the graph showing the number of requests received for each file identifier
  - gnuplot 'graph_replicates.plot' to generate the graph showing the number of replicates for each file identifier
 
+
+## Pre-computed database
+
+The folder "databases" contains two files that are the databases we built during our own collect.
+The databases have been anonymised using the script `scripts/4_database_anonymisation.py`. The script replaces the CID, PEERID and IP Adresses contained in the database by random UUID values.
 
