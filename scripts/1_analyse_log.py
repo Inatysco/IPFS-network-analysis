@@ -21,9 +21,9 @@ IPFS_URLS = os.environ['IPFS_URLS'].split(',') # IPFS_URLS contains http://127.0
 NB_WORKERS=len(IPFS_URLS)
 REQUEST_TIMEOUT=1
 
-GEOIP_COUNTRY_DATABASE = '/var/lib/GeoIP/GeoLite2-Country.mmdb'
-GEOIP_CITY_DATABASE = '/var/lib/GeoIP/GeoLite2-City.mmdb'
-GEOIP_ASN_DATABASE = '/var/lib/GeoIP/GeoLite2-ASN.mmdb'
+GEOIP_COUNTRY_DATABASE = os.environ['GEOLITE_COUNTRY'] if 'GEOLITE_COUNTRY' in os.environ else '/var/lib/GeoIP/GeoLite2-Country.mmdb'
+GEOIP_CITY_DATABASE = os.environ['GEOLITE_CITY'] if 'GEOLITE_CITY' in os.environ else '/var/lib/GeoIP/GeoLite2-City.mmdb'
+GEOIP_ASN_DATABASE = os.environ['GEOLITE_ASN'] if 'GEOLITE_ASN' in os.environ else '/var/lib/GeoIP/GeoLite2-ASN.mmdb'
 
 def dhtquery(ipfs_url, arg):
  """get the closest peers from arg in the DHT"""

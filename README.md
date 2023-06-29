@@ -28,8 +28,8 @@ The script `scripts/1_analyse_ipfs_log.py` is designed to try to detect the IP a
 2. Convert the log file into a file that can be imported in a SQL database
 
 First, download the Maxmind databases containing information on IP addresses and Autonomous systems.
-This can be done by registering a free license key on https://www.maxmind.com/en/geolite2/signup?lang=en and using the ``geoipupdate`` software program. This downloads the database in /var/lib/GeoIP/ directory.
-
+This can be done by registering a free license key on https://www.maxmind.com/en/geolite2/signup?lang=en and using the ``geoipupdate`` software program.
+The script looks for the file in the `/var/lib/GeoIP/` but the path of the different files can be specified using the `GEOLITE_COUNTRY`, `GEOLITE_CITY` and ``GEOLITE_ASN` environment variables.
 
 Then launch the python script to convert the log file into a list of SQL commands.
 ```
