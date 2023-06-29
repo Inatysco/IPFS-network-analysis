@@ -223,8 +223,6 @@ def main_replicates(host, database, username, password, output_csv, output_gnupl
   f.write('\'\' using 3 smooth csplines ti "mean" lt 1 lc rgb \'#0086ee\'\n')
 
 
-
-
 if '__main__' == __name__:
  if len(sys.argv) < 8:
   print('Usage: %s dbhost dbname dbusername dbpassword output_csv output_gnuplot output_img' % (sys.argv[0]), file=sys.stderr)
@@ -238,6 +236,19 @@ if '__main__' == __name__:
  output_gnuplot = sys.argv[6]
  output_img = sys.argv[7]
 
- main_replicates(host, database, username, password, "%s_replicates" % (output_csv), "%s_replicates" % (output_gnuplot), "%s_replicates" % (output_img))
- main_requests(host, database, username, password, "%s_requests" % (output_csv), "%s_requests" % (output_gnuplot), "%s_requests" % (output_img))
- main_days(host, database, username, password, "%s_days" % (output_csv), "%s_days" % (output_gnuplot), "%s_days" % (output_img))
+ output_csv_replicates = "%s_replicates.%s" % (output_csv.split(".")[0], '.'.join(output_csv.split(".")[1:]))
+ output_csv_requests = "%s_requests.%s" % (output_csv.split(".")[0], '.'.join(output_csv.split(".")[1:]))
+ output_csv_days = "%s_days.%s" % (output_csv.split(".")[0], '.'.join(output_csv.split(".")[1:]))
+
+ output_gnuplot_replicates = "%s_replicates.%s" % (output_gnuplot.split(".")[0], '.'.join(output_gnuplot.split(".")[1:]))
+ output_gnuplot_requests = "%s_requests.%s" % (output_gnuplot.split(".")[0], '.'.join(output_gnuplot.split(".")[1:]))
+ output_gnuplot_days = "%s_days.%s" % (output_gnuplot.split(".")[0], '.'.join(output_gnuplot.split(".")[1:]))
+
+ output_img_replicates = "%s_replicates.%s" % (output_img.split(".")[0], '.'.join(output_img.split(".")[1:]))
+ output_img_requests = "%s_requests.%s" % (output_img.split(".")[0], '.'.join(output_img.split(".")[1:]))
+ output_img_days = "%s_days.%s" % (output_img.split(".")[0], '.'.join(output_img.split(".")[1:]))
+
+
+ main_replicates(host, database, username, password, output_csv_replicates, output_gnuplot_replicates, output_img_replicates)
+ main_requests(host, database, username, password, output_csv_requests, output_gnuplot_requests, output_img_requests)
+ main_days(host, database, username, password, output_csv_days, output_gnuplot_days, output_img_days)
