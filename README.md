@@ -40,7 +40,7 @@ python scripts/1_ipfs_log_analysis.py mylog.log > mylog.db
 
 ## SQL import
 
-The previous output is a file with SQL command that can be then imported in an SQL database (postgresql)
+The previous output is a file with SQL commands that can be then imported into a SQL database (postgresql)
 
 1. Create schema
 
