@@ -6,7 +6,7 @@ This repository contains the scripts used to collect the trace of DHT requests i
 
 Run IPFS in debug mode.
 The node will connect to a public bootstrap node, get a position in the public Distributed Hash Table.
-Therefoe some DHT requests will be received and forwarded by the node and therefore can be saved in a logfile.
+Therefore some DHT requests will be received and forwarded by the node and therefore can be saved in a logfile.
 
 ```
 ìpfs daemon --routing=dht --verbose | grep 'handling message' > mylog.log 
@@ -16,8 +16,8 @@ Therefoe some DHT requests will be received and forwarded by the node and theref
 
 ## Analysis of the logfile
 
-The logfile contains only date/hour, peerid and cid (file identifier) of the requested file.
-The script `scripts/1_ipfs_log_analysis.py` is designed to try to detect the IP address of the peerid and the filetype of the file corresponding to the cid.
+The logfile contains only date/hour, PEERID and CID (file identifier) of the requested file.
+The script `scripts/1_ipfs_log_analysis.py` is designed to try to detect the IP address of the PEERID and the filetype of the file corresponding to the CID.
 
 
 1. Launch an IPFS daemon that will be used to associate IP address, filetype, ... from the PEERID and CID collected in the logfile
