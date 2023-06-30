@@ -17,7 +17,7 @@ Therefoe some DHT requests will be received and forwarded by the node and theref
 ## Analysis of the logfile
 
 The logfile contains only date/hour, peerid and cid (file identifier) of the requested file.
-The script `scripts/1_analyse_ipfs_log.py` is designed to try to detect the IP address of the peerid and the filetype of the file corresponding to the cid.
+The script `scripts/1_ipfs_log_analysis.py` is designed to try to detect the IP address of the peerid and the filetype of the file corresponding to the cid.
 
 
 1. Launch an IPFS daemon that will be used to associate IP address, filetype, ... from the PEERID and CID collected in the logfile
@@ -34,7 +34,7 @@ The script looks for the file in the `/var/lib/GeoIP/` but the path of the diffe
 Then launch the python script to convert the log file into a list of SQL commands.
 ```
 export IPFS_URLS="http://127.0.0.1:5001" # the url to the API of the IPFS node previously launched
-python scripts/1_analyse_ipfs_log.py mylog.log > mylog.db
+python scripts/1_ipfs_log_analysis.py mylog.log > mylog.db
 ```
 
 ## SQL import
@@ -55,7 +55,7 @@ psql database user < mylog.db
 ## Graphics generation
 
 ```
-python scripts/3_generate_graphs.py database user password graph.csv graph.plot graph.png
+python scripts/3_graphs_generation.py database user password graph.csv graph.plot graph.png
 ```
 
 It generates csv and plot files. The graphs can be then generated using gnuplot executable:
