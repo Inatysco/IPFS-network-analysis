@@ -66,7 +66,7 @@ It generates csv and plot files. The graphs can be then generated using gnuplot 
  - gnuplot 'graph_replicates.plot' to generate the graph showing the number of replicates for each file identifier
 
 
-## Pre-computed database
+## Provided database
 
 The `database/` folder contains two files that are the databases we built during our own collect:
  - `gcp_20211217_20230101.db` contains the records collected between the 17th December 2021 and the 01st January 2023 from a node hosted on Google Cloud.
