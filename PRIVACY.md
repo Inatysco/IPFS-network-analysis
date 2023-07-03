@@ -23,8 +23,7 @@ Before any study, the collected pieces of data have been anonymised and the foll
  - the IP addresses
 
 ## Contact
-If you have any question you can contact us using the following form: https://www.inatysco.fr/en/contact-en/
-
+If you have any question you can contact us using the following form: contact@inatysco.fr
 
 ## What are my rights?
 You have the right to be informed about the data we collect about you. If you have the right by law, you can correct, delete or limit the data we collect about you.
